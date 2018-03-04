@@ -18,31 +18,23 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
+ *
  */
 
-package com.raywenderlich.android.bottomsup
+package com.raywenderlich.android.bottomsup.data.database
 
-import com.facebook.stetho.Stetho
-import com.raywenderlich.android.bottomsup.di.AppModule
-import com.raywenderlich.android.bottomsup.di.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
+import android.arch.persistence.room.Database
+import android.arch.persistence.room.RoomDatabase
+import com.raywenderlich.android.bottomsup.model.Beer
 
 
 /**
- * Application
+ * Database
  */
 
-class BeersApp : DaggerApplication() {
+@Database(entities = [Beer::class], version = 1)
+abstract class BeerDatabase : RoomDatabase() {
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
-        appComponent.inject(this)
-        return appComponent
-    }
+    abstract fun beerDao(): BeerDao
 
-    override fun onCreate() {
-        super.onCreate()
-        Stetho.initializeWithDefaults(this);
-    }
 }

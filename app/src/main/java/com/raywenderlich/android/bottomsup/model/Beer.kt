@@ -22,6 +22,10 @@
 
 package com.raywenderlich.android.bottomsup.model
 
+import android.arch.persistence.room.Embedded
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
+import android.arch.persistence.room.PrimaryKey
 import com.squareup.moshi.Json
 import java.io.Serializable
 
@@ -29,78 +33,18 @@ import java.io.Serializable
  * Beer.
  */
 
+@Entity(tableName = "beer")
 data class Beer(
-        @Json(name = "servingTemperatureDisplay") val servingTemperatureDisplay: String?,
-        @Json(name = "labels") val labels: Labels?,
-        @Json(name = "style") val style: Style?,
-        @Json(name = "status") val status: String?,
-        @Json(name = "srmId") val srmId: String?,
-        @Json(name = "beerVariationId") val beerVariationId: String?,
-        @Json(name = "statusDisplay") val statusDisplay: String?,
-        @Json(name = "foodPairings") val foodPairings: String?,
-        @Json(name = "srm") val srm: List<Any?>?,
-        @Json(name = "updateDate") val updateDate: String?,
-        @Json(name = "servingTemperature") val servingTemperature: String?,
-        @Json(name = "availableId") val availableId: Int?,
-        @Json(name = "beerVariation") val beerVariation: List<Any?>?,
-        @Json(name = "abv") val abv: String?,
-        @Json(name = "year") val year: String?,
-        @Json(name = "name") val name: String?,
-        @Json(name = "id") val id: String?,
-        @Json(name = "originalGravity") val originalGravity: String?,
-        @Json(name = "styleId") val styleId: Int?,
-        @Json(name = "ibu") val ibu: String?,
-        @Json(name = "glasswareId") val glasswareId: Int?,
-        @Json(name = "isOrganic") val isOrganic: String?,
-        @Json(name = "createDate") val createDate: String?,
-        @Json(name = "available") val available: Available?,
-        @Json(name = "glass") val glass: Glass?,
-        @Json(name = "description") val description: String?
-): Serializable
+        @PrimaryKey @Json(name = "id") var id: String = "",
+        @Json(name = "name") var name: String = "",
+        @Json(name = "description") var description: String = "",
+        @Embedded @Json(name = "labels") var labels: Labels = Labels()
+): @Ignore Serializable
 
-data class Style(
-        @Json(name = "id") val id: Int?,
-        @Json(name = "category") val category: Category?,
-        @Json(name = "description") val description: String?,
-        @Json(name = "ibuMax") val ibuMax: String?,
-        @Json(name = "srmMin") val srmMin: String?,
-        @Json(name = "srmMax") val srmMax: String?,
-        @Json(name = "ibuMin") val ibuMin: String?,
-        @Json(name = "ogMax") val ogMax: String?,
-        @Json(name = "fgMin") val fgMin: String?,
-        @Json(name = "fgMax") val fgMax: String?,
-        @Json(name = "createDate") val createDate: String?,
-        @Json(name = "updateDate") val updateDate: String?,
-        @Json(name = "abvMax") val abvMax: String?,
-        @Json(name = "ogMin") val ogMin: String?,
-        @Json(name = "abvMin") val abvMin: String?,
-        @Json(name = "name") val name: String?,
-        @Json(name = "categoryId") val categoryId: Int?
-): Serializable
-
-data class Category(
-        @Json(name = "updateDate") val updateDate: String?,
-        @Json(name = "id") val id: Int?,
-        @Json(name = "description") val description: String?,
-        @Json(name = "createDate") val createDate: String?,
-        @Json(name = "name") val name: String?
-): Serializable
 
 data class Labels(
-        @Json(name = "medium") val medium: String?,
-        @Json(name = "large") val large: String?,
-        @Json(name = "icon") val icon: String?
-): Serializable
+        @Json(name = "icon") var icon: String = "",
+        @Ignore @Json(name = "medium") var medium: String = "",
+        @Ignore @Json(name = "large") var large: String = ""
+): @Ignore Serializable
 
-data class Glass(
-        @Json(name = "updateDate") val updateDate: String?,
-        @Json(name = "id") val id: Int?,
-        @Json(name = "description") val description: String?,
-        @Json(name = "createDate") val createDate: String?,
-        @Json(name = "name") val name: String?
-): Serializable
-
-data class Available(
-        @Json(name = "description") val description: String?,
-        @Json(name = "name") val name: String?
-): Serializable

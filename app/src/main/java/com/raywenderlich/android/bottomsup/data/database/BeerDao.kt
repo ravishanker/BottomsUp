@@ -18,31 +18,32 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
+ *
  */
 
-package com.raywenderlich.android.bottomsup
+package com.raywenderlich.android.bottomsup.data.database
 
-import com.facebook.stetho.Stetho
-import com.raywenderlich.android.bottomsup.di.AppModule
-import com.raywenderlich.android.bottomsup.di.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
-
+import android.arch.lifecycle.LiveData
+import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.OnConflictStrategy
+import android.arch.persistence.room.Query
+import com.raywenderlich.android.bottomsup.model.Beer
 
 /**
- * Application
+ * Beer Data Access Object(Dao).
  */
 
-class BeersApp : DaggerApplication() {
+@Dao
+interface BeerDao {
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
-        appComponent.inject(this)
-        return appComponent
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(beers: List<Beer>)
 
-    override fun onCreate() {
-        super.onCreate()
-        Stetho.initializeWithDefaults(this);
-    }
+    @Query("SELECT * FROM beer")
+    fun beers(): LiveData<List<Beer>>
+
+
+    @Query("SELECT * FROM beer WHERE id = :beerId")
+    fun beerById(beerId: String): LiveData<Beer>
 }

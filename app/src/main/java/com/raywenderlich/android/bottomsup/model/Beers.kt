@@ -29,8 +29,8 @@ import com.squareup.moshi.Json
  */
 
 data class Beers(
-		@Json(name = "status") val status: String?,
-		@Json(name = "numberOfPages") val numberOfPages: Int?,
-		@Json(name = "data") val data: List<Beer>,
-		@Json(name = "currentPage") val currentPage: Int?
+        @Json(name = "status") val status: String?,
+        @Json(name = "numberOfPages") val numberOfPages: Int?,
+        @Json(name = "data") val data: List<Beer>,
+        @Json(name = "currentPage") val currentPage: Int?
 )

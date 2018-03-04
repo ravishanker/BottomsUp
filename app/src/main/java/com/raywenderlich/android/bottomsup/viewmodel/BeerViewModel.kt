@@ -22,14 +22,11 @@
 
 package com.raywenderlich.android.bottomsup.viewmodel
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import com.raywenderlich.android.bottomsup.data.repository.BreweryDbRepository
-import com.raywenderlich.android.bottomsup.model.Beers
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.raywenderlich.android.bottomsup.model.Beer
 import javax.inject.Inject
 
 /**
@@ -38,22 +35,14 @@ import javax.inject.Inject
 
 class BeerViewModel @Inject constructor(private val repository: BreweryDbRepository) : ViewModel() {
 
-    val beerData = MutableLiveData<Beers>()
+    var beersList: LiveData<List<Beer>> = MutableLiveData()
 
-    fun getBeers() {
-        repository.getBeers(1).enqueue(beersCallback())
+    init {
+        beersList = repository.getBeers(1)
     }
 
-    private fun beersCallback() = object : Callback<Beers> {
-        override fun onFailure(call: Call<Beers>?, t: Throwable?) {
-            Log.d("Failure Response: ", t.toString())
-        }
-
-        override fun onResponse(call: Call<Beers>?, response: Response<Beers>?) {
-            response?.body()?.run {
-                Log.d("Success Response: ", this.toString())
-                beerData.value = this
-            }
-        }
+    fun getBeers(): LiveData<List<Beer>> {
+        return beersList
     }
+
 }

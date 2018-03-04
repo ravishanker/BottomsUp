@@ -23,8 +23,13 @@
 package com.raywenderlich.android.bottomsup.di
 
 import android.app.Application
+import android.arch.persistence.room.Room
+import android.util.Log
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.raywenderlich.android.bottomsup.data.api.BreweryDbApiService
 import com.raywenderlich.android.bottomsup.data.api.MockResponseInterceptor
+import com.raywenderlich.android.bottomsup.data.database.BeerDao
+import com.raywenderlich.android.bottomsup.data.database.BeerDatabase
 import com.raywenderlich.android.bottomsup.data.repository.BreweryDbRepository
 import dagger.Module
 import dagger.Provides
@@ -32,6 +37,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 import javax.inject.Singleton
 
 
@@ -52,6 +59,7 @@ class AppModule(val app: Application) {
     @Provides
     fun provideLoggingInterceptor() = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
+        HttpLoggingInterceptor.Logger { Log.d("BeerApi: ", it) }
     }
 
     @Singleton
@@ -60,6 +68,7 @@ class AppModule(val app: Application) {
                             mockResponseInterceptor: MockResponseInterceptor): OkHttpClient =
             OkHttpClient.Builder()
                     .addInterceptor(mockResponseInterceptor)
+                    .addNetworkInterceptor(StethoInterceptor())
                     .addInterceptor(loggingInterceptor)
                     .build()
 
@@ -81,9 +90,23 @@ class AppModule(val app: Application) {
     fun provideBreweryDbApiService(retrofit: Retrofit): BreweryDbApiService =
             retrofit.create(BreweryDbApiService::class.java)
 
-    @Singleton @Provides
-    fun provideBreweryDbRepository(service: BreweryDbApiService): BreweryDbRepository =
-        BreweryDbRepository(service)
+    @Provides
+    fun provideExecutor(): Executor = Executors.newSingleThreadExecutor()
 
+
+    @Singleton @Provides
+    fun provideBreweryDbRepository(service: BreweryDbApiService,
+                                   dao: BeerDao,
+                                   executor: Executor): BreweryDbRepository =
+            BreweryDbRepository(service, dao, executor)
+
+    @Singleton @Provides
+    fun provideBeerDatabase(): BeerDatabase =
+            Room.databaseBuilder(app, BeerDatabase::class.java, "beers_db")
+                    .fallbackToDestructiveMigration()
+                    .build()
+
+    @Singleton @Provides
+    fun provideBeerDataAccessObject(db: BeerDatabase): BeerDao = db.beerDao()
 
 }

@@ -28,15 +28,11 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import com.raywenderlich.android.bottomsup.R
-import com.raywenderlich.android.bottomsup.data.repository.BreweryDbRepository
-import com.raywenderlich.android.bottomsup.model.Beers
+import com.raywenderlich.android.bottomsup.model.Beer
 import com.raywenderlich.android.bottomsup.viewmodel.BeerViewModel
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_beer_list.*
 import kotlinx.android.synthetic.main.beer_list.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 
@@ -75,17 +71,15 @@ class BeerListActivity : AppCompatActivity() {
             mTwoPane = true
         }
 
-        beerViewModel.beerData.observe(this, Observer {
+        beerViewModel.getBeers().observe(this, Observer {
             it?.let {
-                Log.d("Beers", it.toString())
+                Log.d("Beers Live", it.toString())
                 setupRecyclerView(beer_list, it)
             }
         })
-
-        beerViewModel.getBeers()
     }
 
-    private fun setupRecyclerView(recyclerView: RecyclerView, beers: Beers) {
-        recyclerView.adapter = BeersRecyclerViewAdapter(this, beers.data, mTwoPane)
+    private fun setupRecyclerView(recyclerView: RecyclerView, beers: List<Beer>) {
+        recyclerView.adapter = BeersRecyclerViewAdapter(this, beers, mTwoPane)
     }
 }
