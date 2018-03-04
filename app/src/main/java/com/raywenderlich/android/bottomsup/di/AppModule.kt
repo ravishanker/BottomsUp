@@ -39,7 +39,7 @@ import javax.inject.Singleton
  * AppModule.
  */
 
-@Module
+@Module(includes = [ViewModelModule::class])
 class AppModule(val app: Application) {
 
     @Provides

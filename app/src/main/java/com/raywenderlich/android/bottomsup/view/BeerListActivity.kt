@@ -22,6 +22,7 @@
 
 package com.raywenderlich.android.bottomsup.view
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
@@ -29,6 +30,7 @@ import android.util.Log
 import com.raywenderlich.android.bottomsup.R
 import com.raywenderlich.android.bottomsup.data.repository.BreweryDbRepository
 import com.raywenderlich.android.bottomsup.model.Beers
+import com.raywenderlich.android.bottomsup.viewmodel.BeerViewModel
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_beer_list.*
 import kotlinx.android.synthetic.main.beer_list.*
@@ -54,7 +56,7 @@ class BeerListActivity : AppCompatActivity() {
      */
     private var mTwoPane: Boolean = false
 
-    @Inject lateinit var breweryDbRepository: BreweryDbRepository
+    @Inject lateinit var beerViewModel: BeerViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -73,24 +75,17 @@ class BeerListActivity : AppCompatActivity() {
             mTwoPane = true
         }
 
-        breweryDbRepository.getBeers(1).enqueue(beersCallback())
+        beerViewModel.beerData.observe(this, Observer {
+            it?.let {
+                Log.d("Beers", it.toString())
+                setupRecyclerView(beer_list, it)
+            }
+        })
+
+        beerViewModel.getBeers()
     }
 
     private fun setupRecyclerView(recyclerView: RecyclerView, beers: Beers) {
         recyclerView.adapter = BeersRecyclerViewAdapter(this, beers.data, mTwoPane)
-    }
-
-    private fun beersCallback() = object : Callback<Beers> {
-        override fun onFailure(call: Call<Beers>?, t: Throwable?) {
-            Log.d(BeerListActivity::class.simpleName, t.toString())
-        }
-
-        override fun onResponse(call: Call<Beers>?, response: Response<Beers>?) {
-
-            response?.body()?.run {
-                Log.d("Response", this.toString())
-                setupRecyclerView(beer_list, this)
-            }
-        }
     }
 }
