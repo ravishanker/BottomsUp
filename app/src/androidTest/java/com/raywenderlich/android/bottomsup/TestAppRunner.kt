@@ -22,27 +22,34 @@
 
 package com.raywenderlich.android.bottomsup
 
-import com.facebook.stetho.Stetho
-import com.raywenderlich.android.bottomsup.di.AppModule
-import com.raywenderlich.android.bottomsup.di.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
+import android.app.Application
+import android.content.Context
+import android.support.test.runner.AndroidJUnitRunner
+import android.support.test.InstrumentationRegistry
+import com.linkedin.android.testbutler.TestButler
+import android.os.Bundle
+
+
 
 
 /**
- * Application
+ * Custom runner to disable dependency injection.
  */
 
-open class BeersApp : DaggerApplication() {
+class TestAppRunner : AndroidJUnitRunner() {
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
-        appComponent.inject(this)
-        return appComponent
+    @Throws(InstantiationException::class, IllegalAccessException::class, ClassNotFoundException::class)
+    override fun newApplication(cl: ClassLoader, className: String, context: Context): Application {
+        return super.newApplication(cl, TestApp::class.java.name, context)
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        Stetho.initializeWithDefaults(this);
+    override fun onStart() {
+        TestButler.setup(InstrumentationRegistry.getTargetContext())
+        super.onStart()
+    }
+
+    override fun finish(resultCode: Int, results: Bundle) {
+        TestButler.teardown(InstrumentationRegistry.getTargetContext())
+        super.finish(resultCode, results)
     }
 }

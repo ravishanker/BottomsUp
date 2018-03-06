@@ -33,7 +33,7 @@ import javax.inject.Inject
  * BeersViewModel.
  */
 
-class BeerViewModel @Inject constructor(private val repository: BreweryDbRepository) : ViewModel() {
+class BeerViewModel @Inject constructor(repository: BreweryDbRepository) : ViewModel() {
 
     var beersList: LiveData<List<Beer>> = MutableLiveData()
 

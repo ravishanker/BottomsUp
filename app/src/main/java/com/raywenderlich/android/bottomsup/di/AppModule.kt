@@ -31,6 +31,8 @@ import com.raywenderlich.android.bottomsup.data.api.MockResponseInterceptor
 import com.raywenderlich.android.bottomsup.data.database.BeerDao
 import com.raywenderlich.android.bottomsup.data.database.BeerDatabase
 import com.raywenderlich.android.bottomsup.data.repository.BreweryDbRepository
+import com.squareup.moshi.KotlinJsonAdapterFactory
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -47,14 +49,14 @@ import javax.inject.Singleton
  */
 
 @Module(includes = [ViewModelModule::class])
-class AppModule(val app: Application) {
+open class AppModule(val app: Application) {
 
     @Provides
     @Singleton
     fun provideApplication(): Application = app
 
     @Provides
-    fun provideMockResponseInterceptor() = MockResponseInterceptor(app)
+    open fun provideMockResponseInterceptor() = MockResponseInterceptor(app) //comment this out when using real api
 
     @Provides
     fun provideLoggingInterceptor() = HttpLoggingInterceptor().apply {
@@ -64,17 +66,18 @@ class AppModule(val app: Application) {
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor,
-                            mockResponseInterceptor: MockResponseInterceptor): OkHttpClient =
+    open fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor,
+                                 mockResponseInterceptor: MockResponseInterceptor): OkHttpClient =
             OkHttpClient.Builder()
-                    .addInterceptor(mockResponseInterceptor)
+                    .addInterceptor(mockResponseInterceptor) //comment this out when using real api
                     .addNetworkInterceptor(StethoInterceptor())
                     .addInterceptor(loggingInterceptor)
                     .build()
 
     @Singleton
     @Provides
-    fun provideMoshiConverter(): MoshiConverterFactory = MoshiConverterFactory.create()
+    fun provideMoshiConverter(): MoshiConverterFactory =
+            MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build())
 
     @Singleton
     @Provides

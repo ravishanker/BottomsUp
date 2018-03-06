@@ -22,19 +22,18 @@
 
 package com.raywenderlich.android.bottomsup.view
 
-import android.content.Context
 import android.content.Intent
+import android.databinding.DataBindingUtil
+import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import com.raywenderlich.android.bottomsup.BR
 import com.raywenderlich.android.bottomsup.R
 import com.raywenderlich.android.bottomsup.model.Beer
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.beer_list_content.view.*
+
 
 /**
  * Beers Recycler View Adapter.
@@ -46,7 +45,6 @@ class BeersRecyclerViewAdapter(private val parentActivity: BeerListActivity,
         RecyclerView.Adapter<BeersRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
-    private lateinit var context: Context
 
     init {
         mOnClickListener = View.OnClickListener { v ->
@@ -71,16 +69,16 @@ class BeersRecyclerViewAdapter(private val parentActivity: BeerListActivity,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        context = parent.context
+        val inflater = LayoutInflater.from(parent.context)
+        val binding: ViewDataBinding = DataBindingUtil.inflate(
+                inflater, R.layout.beer_list_content, parent, false)
 
-        val inflater = LayoutInflater.from(context)
-        val view = inflater.inflate(R.layout.beer_list_content, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.showBeerView(item)
+        holder.bind(item)
 
         with(holder.itemView) {
             tag = item
@@ -92,19 +90,10 @@ class BeersRecyclerViewAdapter(private val parentActivity: BeerListActivity,
         return values.size
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val beerNameView: TextView = view.beerName
-        private val beerIconView: ImageView = view.beerImage
-        private val beerDescriptionView: TextView = view.beerDescription
-
-        fun showBeerView(beer: Beer) {
-            Picasso.with(context)
-                    .load(beer.labels!!.icon)
-                    .placeholder(R.drawable.ic_beer_black_24dp)
-                    .into(beerIconView)
-
-            beerNameView.text = beer.name
-            beerDescriptionView.text = beer.description
+    inner class ViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(data: Any) {
+            binding.setVariable(BR.beer, data)
+            binding.executePendingBindings()
         }
     }
 }

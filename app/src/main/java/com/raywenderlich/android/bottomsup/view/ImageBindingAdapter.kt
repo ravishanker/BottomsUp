@@ -20,29 +20,26 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.bottomsup
+package com.raywenderlich.android.bottomsup.view
 
-import com.facebook.stetho.Stetho
-import com.raywenderlich.android.bottomsup.di.AppModule
-import com.raywenderlich.android.bottomsup.di.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
-
+import android.databinding.BindingAdapter
+import android.widget.ImageView
+import com.raywenderlich.android.bottomsup.R
+import com.squareup.picasso.Picasso
 
 /**
- * Application
+ * Image Binding Adapter for use with RecyclerView with databinding.
  */
 
-open class BeersApp : DaggerApplication() {
-
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
-        appComponent.inject(this)
-        return appComponent
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        Stetho.initializeWithDefaults(this);
+object ImageBindingAdapter {
+    @JvmStatic
+    @BindingAdapter("bind:imageUrl")
+    fun setImageUrl(view: ImageView, url: String) {
+        if (url.isNotEmpty()) {
+            Picasso.with(view.context)
+                    .load(url)
+                    .placeholder(R.drawable.ic_beer_black_24dp)
+                    .into(view)
+        }
     }
 }

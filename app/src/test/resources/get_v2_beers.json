@@ -1,0 +1,137 @@
+{
+  "status": "success",
+  "numberOfPages": 225,
+  "data": [
+    {
+      "servingTemperatureDisplay": "",
+      "labels": {
+        "medium": "http://s3.amazonaws.com/",
+        "large": "http://s3.amazonaws.com/",
+        "icon": "http://s3.amazonaws.com/"
+      },
+      "style": {
+        "id": 15,
+        "category": {
+          "updateDate": "",
+          "id": 5,
+          "description": "",
+          "createDate": "2012-01-02 11:50:42",
+          "name": "Bock"
+        },
+        "description": "",
+        "ibuMax": "27",
+        "srmMin": "14",
+        "srmMax": "22",
+        "ibuMin": "20",
+        "ogMax": "1.072",
+        "fgMin": "1.013",
+        "fgMax": "1.019",
+        "createDate": "2012-01-02 11:50:42",
+        "updateDate": "",
+        "abvMax": "7.2",
+        "ogMin": "1.064",
+        "abvMin": "6.3",
+        "name": "Traditional Bock",
+        "categoryId": 5
+      },
+      "status": "verified",
+      "srmId": "",
+      "beerVariationId": "",
+      "statusDisplay": "Verified",
+      "foodPairings": "",
+      "srm": [],
+      "updateDate": "",
+      "servingTemperature": "",
+      "availableId": 1,
+      "beerVariation": [],
+      "abv": "6",
+      "year": "",
+      "name": "\"My\" Bock",
+      "id": "HXKxpc",
+      "originalGravity": "",
+      "styleId": 15,
+      "ibu": "",
+      "glasswareId": 5,
+      "isOrganic": "N",
+      "createDate": "2012-01-02 11:51:13",
+      "available": {
+        "description": "Available year round as a staple beer.",
+        "name": "Year Round"
+      },
+      "glass": {
+        "updateDate": "",
+        "id": 5,
+        "description": "",
+        "createDate": "2012-01-02 11:50:42",
+        "name": "Pint"
+      },
+      "description": "Amber, malty and not too heavy, all around favorite even for the drinkers of the yellow fizzy stuff"
+    },
+    {
+      "servingTemperatureDisplay": "",
+      "labels": {
+        "medium": "http://s3.amazonaws.com/",
+        "large": "http://s3.amazonaws.com/",
+        "icon": "http://s3.amazonaws.com/"
+      },
+      "style": {
+        "id": 15,
+        "category": {
+          "updateDate": "",
+          "id": 5,
+          "description": "",
+          "createDate": "2012-01-02 11:50:42",
+          "name": "Bock"
+        },
+        "description": "",
+        "ibuMax": "27",
+        "srmMin": "14",
+        "srmMax": "22",
+        "ibuMin": "20",
+        "ogMax": "1.072",
+        "fgMin": "1.013",
+        "fgMax": "1.019",
+        "createDate": "2012-01-02 11:50:42",
+        "updateDate": "",
+        "abvMax": "7.2",
+        "ogMin": "1.064",
+        "abvMin": "6.3",
+        "name": "Traditional Bock",
+        "categoryId": 5
+      },
+      "status": "verified",
+      "srmId": "",
+      "beerVariationId": "",
+      "statusDisplay": "Verified",
+      "foodPairings": "",
+      "srm": [],
+      "updateDate": "",
+      "servingTemperature": "",
+      "availableId": 1,
+      "beerVariation": [],
+      "abv": "6",
+      "year": "",
+      "name": "\"My\" Bock",
+      "id": "HXKpcx",
+      "originalGravity": "",
+      "styleId": 15,
+      "ibu": "",
+      "glasswareId": 5,
+      "isOrganic": "N",
+      "createDate": "2012-01-02 11:51:13",
+      "available": {
+        "description": "Available year round as a staple beer.",
+        "name": "Year Round"
+      },
+      "glass": {
+        "updateDate": "",
+        "id": 5,
+        "description": "",
+        "createDate": "2012-01-02 11:50:42",
+        "name": "Pint"
+      },
+      "description": "Amber, malty and not too heavy, all around favorite even for the drinkers of the yellow fizzy stuff"
+    }
+  ],
+  "currentPage": 1
+}

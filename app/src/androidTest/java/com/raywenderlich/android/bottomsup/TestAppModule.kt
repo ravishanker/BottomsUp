@@ -22,27 +22,27 @@
 
 package com.raywenderlich.android.bottomsup
 
-import com.facebook.stetho.Stetho
+import android.app.Application
+import com.raywenderlich.android.bottomsup.data.api.MockResponseInterceptor
 import com.raywenderlich.android.bottomsup.di.AppModule
-import com.raywenderlich.android.bottomsup.di.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
+import dagger.Module
+import dagger.Provides
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import javax.inject.Singleton
 
+@Module
+class TestAppModule(app: Application) : AppModule(app) {
 
-/**
- * Application
- */
+    @Provides
+    override fun provideMockResponseInterceptor() = MockResponseInterceptor(app)
 
-open class BeersApp : DaggerApplication() {
-
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
-        appComponent.inject(this)
-        return appComponent
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        Stetho.initializeWithDefaults(this);
-    }
+    @Singleton
+    @Provides
+    override fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor,
+                                     mockResponseInterceptor: MockResponseInterceptor): OkHttpClient =
+            OkHttpClient.Builder()
+                    .addInterceptor(mockResponseInterceptor)
+                    .addInterceptor(loggingInterceptor)
+                    .build()
 }

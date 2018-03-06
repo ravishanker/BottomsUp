@@ -20,29 +20,34 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.bottomsup
+package com.raywenderlich.android.bottomsup.data.database
 
-import com.facebook.stetho.Stetho
-import com.raywenderlich.android.bottomsup.di.AppModule
-import com.raywenderlich.android.bottomsup.di.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
+import com.raywenderlich.android.bottomsup.model.Beer
+import com.raywenderlich.android.bottomsup.util.LiveDataTestUtil
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.isA
+import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Test
 
+class BeerDaoTest : DbTest() {
 
-/**
- * Application
- */
+    @Test @Throws(InterruptedException::class)
+    fun testInsertAndLoad() {
 
-open class BeersApp : DaggerApplication() {
+        db.beerDao().insert(beerList())
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
-        appComponent.inject(this)
-        return appComponent
+        val beers =  LiveDataTestUtil.getValue(db.beerDao().beers())
+
+        assertThat(beers.size, `is`(2))
+        assertThat(beers.first(), isA(Beer::class.java))
+        assertThat(beers.first().id, `is`("abc"))
+        assertThat(beers.last().id, `is`("def"))
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        Stetho.initializeWithDefaults(this);
+    private fun beerList(): List<Beer> {
+        val beer1 = Beer("abc", "Beer1", "First Beer")
+        val beer2 = Beer("def", "Beer2", "Second Beer")
+        return listOf(beer1, beer2)
     }
+
 }

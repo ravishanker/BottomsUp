@@ -20,29 +20,27 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.bottomsup
+package com.raywenderlich.android.bottomsup.data.database
 
-import com.facebook.stetho.Stetho
-import com.raywenderlich.android.bottomsup.di.AppModule
-import com.raywenderlich.android.bottomsup.di.DaggerAppComponent
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
+import android.support.test.InstrumentationRegistry
+import android.arch.persistence.room.Room
+import org.junit.After
+import org.junit.Before
 
 
-/**
- * Application
- */
+abstract class DbTest {
 
-open class BeersApp : DaggerApplication() {
+    lateinit var db: BeerDatabase
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
-        appComponent.inject(this)
-        return appComponent
+    @Before
+    fun initDb() {
+        db = Room
+                .inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), BeerDatabase::class.java)
+                .build()
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        Stetho.initializeWithDefaults(this);
+    @After
+    fun closeDb() {
+        db.close()
     }
 }

@@ -22,27 +22,17 @@
 
 package com.raywenderlich.android.bottomsup
 
-import com.facebook.stetho.Stetho
-import com.raywenderlich.android.bottomsup.di.AppModule
 import com.raywenderlich.android.bottomsup.di.DaggerAppComponent
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 
-
-/**
- * Application
- */
-
-open class BeersApp : DaggerApplication() {
+class TestApp : BeersApp() {
 
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
+        val appComponent = DaggerAppComponent.builder().appModule(TestAppModule(this)).build()
         appComponent.inject(this)
+
         return appComponent
     }
-
-    override fun onCreate() {
-        super.onCreate()
-        Stetho.initializeWithDefaults(this);
-    }
 }
+
