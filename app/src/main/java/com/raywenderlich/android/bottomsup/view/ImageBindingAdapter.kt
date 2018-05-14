@@ -28,18 +28,18 @@ import com.raywenderlich.android.bottomsup.R
 import com.squareup.picasso.Picasso
 
 /**
- * Image Binding Adapter for use with RecyclerView with databinding.
+ * Image Binding Adapter for use with RecyclerView with data binding.
  */
 
 object ImageBindingAdapter {
-    @JvmStatic
-    @BindingAdapter("bind:imageUrl")
-    fun setImageUrl(view: ImageView, url: String) {
-        if (url.isNotEmpty()) {
-            Picasso.with(view.context)
-                    .load(url)
-                    .placeholder(R.drawable.ic_beer_black_24dp)
-                    .into(view)
-        }
+  @JvmStatic
+  @BindingAdapter("bind:imageUrl")
+  fun setImageUrl(view: ImageView, url: String) {
+    if (url.isNotEmpty()) {
+      Picasso.with(view.context)
+          .load(url)
+          .placeholder(R.drawable.ic_beer_black_24dp)
+          .into(view)
     }
+  }
 }

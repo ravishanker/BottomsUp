@@ -30,20 +30,17 @@ import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
 import com.raywenderlich.android.bottomsup.model.Beer
 
-/**
- * Beer Data Access Object(Dao).
- */
 
 @Dao
 interface BeerDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(beers: List<Beer>)
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  fun insert(beers: List<Beer>)
 
-    @Query("SELECT * FROM beer")
-    fun beers(): LiveData<List<Beer>>
+  @Query("SELECT * FROM beer")
+  fun beers(): LiveData<List<Beer>>
 
 
-    @Query("SELECT * FROM beer WHERE id = :beerId")
-    fun beerById(beerId: String): LiveData<Beer>
+  @Query("SELECT * FROM beer WHERE id = :beerId")
+  fun beerById(beerId: String): LiveData<Beer>
 }

@@ -28,11 +28,11 @@ import dagger.android.DaggerApplication
 
 class TestApp : BeersApp() {
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().appModule(TestAppModule(this)).build()
-        appComponent.inject(this)
+  override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+    val appComponent = DaggerAppComponent.builder().appModule(TestAppModule(this)).build()
+    appComponent.inject(this)
 
-        return appComponent
-    }
+    return appComponent
+  }
 }
 

@@ -53,68 +53,69 @@ import java.util.*
 @RunWith(JUnit4::class)
 class BreweryApiServiceTest {
 
-    @Rule @JvmField
-    val instantExecutorRule = InstantTaskExecutorRule()
+  @Rule
+  @JvmField
+  val instantExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var mockWebServer: MockWebServer
+  private lateinit var mockWebServer: MockWebServer
 
-    private val apiKey = "YOUR_API_KEY"
+  private val apiKey = "YOUR_API_KEY"
 
-    private lateinit var service: BreweryDbApiService
+  private lateinit var service: BreweryDbApiService
 
-    @Before
-    @Throws(IOException::class)
-    fun createService() {
-        mockWebServer = MockWebServer()
+  @Before
+  @Throws(IOException::class)
+  fun createService() {
+    mockWebServer = MockWebServer()
 
-        service = Retrofit.Builder()
-                    .baseUrl(mockWebServer.url("/"))
-                    .addConverterFactory(MoshiConverterFactory.create())
-                    .build().create(BreweryDbApiService::class.java)
+    service = Retrofit.Builder()
+        .baseUrl(mockWebServer.url("/"))
+        .addConverterFactory(MoshiConverterFactory.create())
+        .build().create(BreweryDbApiService::class.java)
+  }
+
+  @After
+  @Throws(IOException::class)
+  fun stopService() {
+    mockWebServer.shutdown()
+  }
+
+  @Test
+  @Throws(IOException::class, InterruptedException::class)
+  fun getBeers() {
+    enqueueResponse("get_v2_beers.json")
+
+    val call: Call<Beers> = service.getBeers(1, apiKey)
+    val response: Response<Beers> = call.execute()
+    val beers = response.body().run { this?.data }
+
+    val request = mockWebServer.takeRequest()
+
+    assertThat(request.path, `is`("/v2/beers?p=1&key=YOUR_API_KEY&styleId=15"))
+    assertTrue(response.isSuccessful)
+    assertThat(beers, notNullValue())
+    assertThat(beers?.size, `is`(2))
+    assertThat(beers?.first()?.id, `is`("HXKxpc"))
+    assertThat(beers?.last()?.id, `is`("HXKpcx"))
+  }
+
+
+  @Throws(IOException::class)
+  private fun enqueueResponse(fileName: String) {
+    enqueueResponse(fileName, Collections.emptyMap())
+  }
+
+  @Throws(IOException::class)
+  private fun enqueueResponse(fileName: String, headers: Map<String, String>) {
+    val inputStream = javaClass.classLoader.getResourceAsStream(fileName)
+    val source = Okio.buffer(Okio.source(inputStream))
+    val mockResponse = MockResponse()
+    for ((key, value) in headers) {
+      mockResponse.addHeader(key, value)
     }
-
-    @After
-    @Throws(IOException::class)
-    fun stopService() {
-        mockWebServer.shutdown()
-    }
-
-    @Test
-    @Throws(IOException::class, InterruptedException::class)
-    fun getBeers() {
-        enqueueResponse("get_v2_beers.json")
-
-        val call: Call<Beers> =   service.getBeers(1, apiKey)
-        val response: Response<Beers> = call.execute()
-        val beers = response.body().run { this?.data }
-
-        val request = mockWebServer.takeRequest()
-
-        assertThat(request.path, `is`("/v2/beers?p=1&key=YOUR_API_KEY&styleId=15"))
-        assertTrue(response.isSuccessful)
-        assertThat(beers, notNullValue())
-        assertThat(beers?.size, `is`(2))
-        assertThat(beers?.first()?.id, `is`("HXKxpc"))
-        assertThat(beers?.last()?.id, `is`("HXKpcx"))
-    }
-
-
-    @Throws(IOException::class)
-    private fun enqueueResponse(fileName: String) {
-        enqueueResponse(fileName, Collections.emptyMap())
-    }
-
-    @Throws(IOException::class)
-    private fun enqueueResponse(fileName: String, headers: Map<String, String>) {
-        val inputStream = javaClass.classLoader.getResourceAsStream(fileName)
-        val source = Okio.buffer(Okio.source(inputStream))
-        val mockResponse = MockResponse()
-        for ((key, value) in headers) {
-            mockResponse.addHeader(key, value)
-        }
-        mockWebServer.enqueue(
-                mockResponse.setBody(
-                        source.readString(StandardCharsets.UTF_8)))
-    }
+    mockWebServer.enqueue(
+        mockResponse.setBody(
+            source.readString(StandardCharsets.UTF_8)))
+  }
 
 }

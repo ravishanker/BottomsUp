@@ -46,32 +46,33 @@ import org.mockito.Mockito.`when` as whenever
 @RunWith(JUnit4::class)
 class BreweryDbRepositoryTest {
 
-    @Rule @JvmField
-    val instantExecutorRule = InstantTaskExecutorRule()
+  @Rule
+  @JvmField
+  val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val service =  mock(BreweryDbApiService::class.java)
-    private val beerDao = mock(BeerDao::class.java)
-    private val executor = InstantAppExecutor()
+  private val service = mock(BreweryDbApiService::class.java)
+  private val beerDao = mock(BeerDao::class.java)
+  private val executor = InstantAppExecutor()
 
-    private val repository = BreweryDbRepository(service, beerDao, executor)
+  private val repository = BreweryDbRepository(service, beerDao, executor)
 
 
-    @Test
-    fun getBeers() {
+  @Test
+  fun getBeers() {
 
-        val beersCall = mock(Call::class.java) as Call<Beers>
-        whenever(service.getBeers(1, "YOUR_API_KEY")).thenReturn(beersCall)
+    val beersCall = mock(Call::class.java) as Call<Beers>
+    whenever(service.getBeers(1, "YOUR_API_KEY")).thenReturn(beersCall)
 
-        val dbData: LiveData<List<Beer>> = MutableLiveData()
-        whenever(beerDao.beers()).thenReturn(dbData)
+    val dbData: LiveData<List<Beer>> = MutableLiveData()
+    whenever(beerDao.beers()).thenReturn(dbData)
 
-        val beers: LiveData<List<Beer>> = repository.getBeers(1)
-        val beersList =  LiveDataTestUtil.getValue(beers)
+    val beers: LiveData<List<Beer>> = repository.getBeers(1)
+    val beersList = LiveDataTestUtil.getValue(beers)
 
-        verify(service).getBeers(1, "YOUR_API_KEY")
-        verify(beerDao).beers()
+    verify(service).getBeers(1, "YOUR_API_KEY")
+    verify(beerDao).beers()
 
-        assertThat(beersList, `is`(not(emptyList())))
-    }
+    assertThat(beersList, `is`(not(emptyList())))
+  }
 
 }

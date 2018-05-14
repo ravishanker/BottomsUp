@@ -28,32 +28,29 @@ import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Singleton
 
-/**
- * ViewModelFactory.
- */
 
 @Singleton
 class ViewModelFactory @Inject constructor(private val creators: Map<Class<out ViewModel>, Provider<ViewModel>>)
-    : ViewModelProvider.Factory {
+  : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        var creator: Provider<out ViewModel>? = creators[modelClass]
-        when (creator) {
-            null -> for ((key, value) in creators) {
-                if (modelClass.isAssignableFrom(key)) {
-                    creator = value
-                    break
-                }
-            }
+  override fun <T : ViewModel> create(modelClass: Class<T>): T {
+    var creator: Provider<out ViewModel>? = creators[modelClass]
+    when (creator) {
+      null -> for ((key, value) in creators) {
+        if (modelClass.isAssignableFrom(key)) {
+          creator = value
+          break
         }
-        when (creator) {
-            null -> throw IllegalArgumentException("unknown model class $modelClass")
-            else -> try {
-                return creator.get() as T
-            } catch (e: Exception) {
-                throw RuntimeException(e)
-            }
-        }
-
+      }
     }
+    when (creator) {
+      null -> throw IllegalArgumentException("unknown model class $modelClass")
+      else -> try {
+        return creator.get() as T
+      } catch (e: Exception) {
+        throw RuntimeException(e)
+      }
+    }
+
+  }
 }

@@ -30,17 +30,17 @@ import org.junit.Before
 
 abstract class DbTest {
 
-    lateinit var db: BeerDatabase
+  lateinit var db: BeerDatabase
 
-    @Before
-    fun initDb() {
-        db = Room
-                .inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), BeerDatabase::class.java)
-                .build()
-    }
+  @Before
+  fun initDb() {
+    db = Room
+        .inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), BeerDatabase::class.java)
+        .build()
+  }
 
-    @After
-    fun closeDb() {
-        db.close()
-    }
+  @After
+  fun closeDb() {
+    db.close()
+  }
 }

@@ -40,42 +40,42 @@ import kotlinx.android.synthetic.main.beer_detail.view.*
  */
 class BeerDetailFragment : Fragment() {
 
+  /**
+   * The dummy content this fragment is presenting.
+   */
+  private var beer: Beer? = null
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    arguments?.let {
+      if (it.containsKey(ARG_BEER)) {
+        // Load the dummy content specified by the fragment
+        // arguments. In a real-world scenario, use a Loader
+        // to load content from a content provider.
+        beer = it.getSerializable(ARG_BEER) as Beer
+        activity?.toolbar_layout?.title = beer?.name
+      }
+    }
+  }
+
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                            savedInstanceState: Bundle?): View? {
+    val rootView = inflater.inflate(R.layout.beer_detail, container, false)
+
+    // Show the dummy content as text in a TextView.
+    beer?.let {
+      rootView.beer_detail.text = it.description
+    }
+
+    return rootView
+  }
+
+  companion object {
     /**
-     * The dummy content this fragment is presenting.
+     * The fragment argument representing the beer ID that this fragment
+     * represents.
      */
-    private var mItem: Beer? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            if (it.containsKey(ARG_BEER)) {
-                // Load the dummy content specified by the fragment
-                // arguments. In a real-world scenario, use a Loader
-                // to load content from a content provider.
-                mItem = it.getSerializable(ARG_BEER) as Beer
-                activity?.toolbar_layout?.title = mItem?.name
-            }
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.beer_detail, container, false)
-
-        // Show the dummy content as text in a TextView.
-        mItem?.let {
-            rootView.beer_detail.text = it.description
-        }
-
-        return rootView
-    }
-
-    companion object {
-        /**
-         * The fragment argument representing the item ID that this fragment
-         * represents.
-         */
-        const val ARG_BEER = "beer"
-    }
+    const val ARG_BEER = "beer"
+  }
 }

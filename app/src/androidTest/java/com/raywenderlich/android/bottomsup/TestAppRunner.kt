@@ -30,26 +30,24 @@ import com.linkedin.android.testbutler.TestButler
 import android.os.Bundle
 
 
-
-
 /**
  * Custom runner to disable dependency injection.
  */
 
 class TestAppRunner : AndroidJUnitRunner() {
 
-    @Throws(InstantiationException::class, IllegalAccessException::class, ClassNotFoundException::class)
-    override fun newApplication(cl: ClassLoader, className: String, context: Context): Application {
-        return super.newApplication(cl, TestApp::class.java.name, context)
-    }
+  @Throws(InstantiationException::class, IllegalAccessException::class, ClassNotFoundException::class)
+  override fun newApplication(cl: ClassLoader, className: String, context: Context): Application {
+    return super.newApplication(cl, TestApp::class.java.name, context)
+  }
 
-    override fun onStart() {
-        TestButler.setup(InstrumentationRegistry.getTargetContext())
-        super.onStart()
-    }
+  override fun onStart() {
+    TestButler.setup(InstrumentationRegistry.getTargetContext())
+    super.onStart()
+  }
 
-    override fun finish(resultCode: Int, results: Bundle) {
-        TestButler.teardown(InstrumentationRegistry.getTargetContext())
-        super.finish(resultCode, results)
-    }
+  override fun finish(resultCode: Int, results: Bundle) {
+    TestButler.teardown(InstrumentationRegistry.getTargetContext())
+    super.finish(resultCode, results)
+  }
 }

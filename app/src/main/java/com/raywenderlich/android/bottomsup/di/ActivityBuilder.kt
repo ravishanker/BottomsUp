@@ -28,18 +28,13 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 
-
-/**
- * Activity Builder.
- */
-
 @Module
 abstract class ActivityBuilder {
 
-    @ContributesAndroidInjector
-    internal abstract fun bindBeerListActivity(): BeerListActivity
+  @ContributesAndroidInjector
+  internal abstract fun bindBeerListActivity(): BeerListActivity
 
-    @ContributesAndroidInjector
-    internal abstract fun bindBeerDetailActivity(): BeerDetailActivity
+  @ContributesAndroidInjector
+  internal abstract fun bindBeerDetailActivity(): BeerDetailActivity
 
 }

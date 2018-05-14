@@ -37,7 +37,7 @@ import javax.inject.Inject
 
 
 /**
- * An activity representing a list of Pings. This activity
+ * An activity representing a list of Beers. This activity
  * has different presentations for handset and tablet-size devices. On
  * handsets, the activity presents a list of items, which when touched,
  * lead to a [BeerDetailActivity] representing
@@ -46,40 +46,41 @@ import javax.inject.Inject
  */
 class BeerListActivity : AppCompatActivity() {
 
-    /**
-     * Whether or not the activity is in two-pane mode, i.e. running on a tablet
-     * device.
-     */
-    private var mTwoPane: Boolean = false
+  /**
+   * Whether or not the activity is in two-pane mode, i.e. running on a tablet
+   * device.
+   */
+  private var twoPane: Boolean = false
 
-    @Inject lateinit var beerViewModel: BeerViewModel
+  @Inject
+  lateinit var beerViewModel: BeerViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    AndroidInjection.inject(this)
 
-        super.onCreate(savedInstanceState)
+    super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_beer_list)
-        setSupportActionBar(toolbar)
-        toolbar.title = title
+    setContentView(R.layout.activity_beer_list)
+    setSupportActionBar(toolbar)
+    toolbar.title = title
 
-        if (beer_detail_container != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true
-        }
-
-        beerViewModel.getBeers().observe(this, Observer {
-            it?.let {
-                Log.d("Beers Live", it.toString())
-                setupRecyclerView(beer_list, it)
-            }
-        })
+    if (beer_detail_container != null) {
+      // The detail container view will be present only in the
+      // large-screen layouts (res/values-w900dp).
+      // If this view is present, then the
+      // activity should be in two-pane mode.
+      twoPane = true
     }
 
-    private fun setupRecyclerView(recyclerView: RecyclerView, beers: List<Beer>) {
-        recyclerView.adapter = BeersRecyclerViewAdapter(this, beers, mTwoPane)
-    }
+    beerViewModel.getBeers().observe(this, Observer {
+      it?.let {
+        Log.d("Beers Live", it.toString())
+        setupRecyclerView(beer_list, it)
+      }
+    })
+  }
+
+  private fun setupRecyclerView(recyclerView: RecyclerView, beers: List<Beer>) {
+    recyclerView.adapter = BeersRecyclerViewAdapter(this, beers, twoPane)
+  }
 }

@@ -28,13 +28,9 @@ import android.arch.persistence.room.RoomDatabase
 import com.raywenderlich.android.bottomsup.model.Beer
 
 
-/**
- * Database
- */
-
 @Database(entities = [Beer::class], version = 1)
 abstract class BeerDatabase : RoomDatabase() {
 
-    abstract fun beerDao(): BeerDao
+  abstract fun beerDao(): BeerDao
 
 }

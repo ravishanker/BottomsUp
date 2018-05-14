@@ -39,12 +39,12 @@ import retrofit2.http.Query
 
 interface BreweryDbApiService {
 
-    @GET("/v2/beers")
-    fun getBeers(@Query("p") page: Int,
-				 @Query("key") apiKey: String,
-				 @Query("styleId") styleId: String = "15"): Call<Beers>
+  @GET("/v2/beers")
+  fun getBeers(@Query("p") page: Int,
+               @Query("key") apiKey: String,
+               @Query("styleId") styleId: String = "15"): Call<Beers>
 
-    @GET("/v2/beer/{beer_id}")
-    fun getBeer(@Path("beer_id") beerId: String,
-                    @Query("key") apiKey: String): Call<Beer>
+  @GET("/v2/beer/{beer_id}")
+  fun getBeer(@Path("beer_id") beerId: String,
+              @Query("key") apiKey: String): Call<Beer>
 }

@@ -44,72 +44,71 @@ import java.util.concurrent.Executors
 import javax.inject.Singleton
 
 
-/**
- * AppModule.
- */
-
 @Module(includes = [ViewModelModule::class])
 open class AppModule(val app: Application) {
 
-    @Provides
-    @Singleton
-    fun provideApplication(): Application = app
+  @Provides
+  @Singleton
+  fun provideApplication(): Application = app
 
-    @Provides
-    open fun provideMockResponseInterceptor() = MockResponseInterceptor(app) //comment this out when using real api
+  @Provides
+  open fun provideMockResponseInterceptor() = MockResponseInterceptor(app) //comment this out when using real api
 
-    @Provides
-    fun provideLoggingInterceptor() = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-        HttpLoggingInterceptor.Logger { Log.d("BeerApi: ", it) }
-    }
+  @Provides
+  fun provideLoggingInterceptor() = HttpLoggingInterceptor().apply {
+    level = HttpLoggingInterceptor.Level.BODY
+    HttpLoggingInterceptor.Logger { Log.d("BeerApi: ", it) }
+  }
 
-    @Singleton
-    @Provides
-    open fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor,
-                                 mockResponseInterceptor: MockResponseInterceptor): OkHttpClient =
-            OkHttpClient.Builder()
-                    .addInterceptor(mockResponseInterceptor) //comment this out when using real api
-                    .addNetworkInterceptor(StethoInterceptor())
-                    .addInterceptor(loggingInterceptor)
-                    .build()
+  @Singleton
+  @Provides
+  open fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor,
+                               mockResponseInterceptor: MockResponseInterceptor): OkHttpClient =
+      OkHttpClient.Builder()
+          .addInterceptor(mockResponseInterceptor) //comment this out when using real api
+          .addNetworkInterceptor(StethoInterceptor())
+          .addInterceptor(loggingInterceptor)
+          .build()
 
-    @Singleton
-    @Provides
-    fun provideMoshiConverter(): MoshiConverterFactory =
-            MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build())
+  @Singleton
+  @Provides
+  fun provideMoshiConverter(): MoshiConverterFactory =
+      MoshiConverterFactory.create(Moshi.Builder().add(KotlinJsonAdapterFactory()).build())
 
-    @Singleton
-    @Provides
-    fun provideRetrofitClient(client: OkHttpClient, converter: MoshiConverterFactory): Retrofit =
-            Retrofit.Builder()
-                    .client(client)
-                    .addConverterFactory(converter)
-                    .baseUrl("http://api.brewerydb.com/v2/")
-                    .build()
+  @Singleton
+  @Provides
+  fun provideRetrofitClient(client: OkHttpClient, converter: MoshiConverterFactory): Retrofit =
+      Retrofit.Builder()
+          .client(client)
+          .addConverterFactory(converter)
+          .baseUrl("http://api.brewerydb.com/v2/")
+          .build()
 
-    @Singleton
-    @Provides
-    fun provideBreweryDbApiService(retrofit: Retrofit): BreweryDbApiService =
-            retrofit.create(BreweryDbApiService::class.java)
+  @Singleton
+  @Provides
+  fun provideBreweryDbApiService(retrofit: Retrofit): BreweryDbApiService =
+      retrofit.create(BreweryDbApiService::class.java)
 
-    @Provides
-    fun provideExecutor(): Executor = Executors.newSingleThreadExecutor()
+  @Provides
+  fun provideExecutor(): Executor = Executors.newSingleThreadExecutor()
 
 
-    @Singleton @Provides
-    fun provideBreweryDbRepository(service: BreweryDbApiService,
-                                   dao: BeerDao,
-                                   executor: Executor): BreweryDbRepository =
-            BreweryDbRepository(service, dao, executor)
+  @Singleton
+  @Provides
+  fun provideBreweryDbRepository(service: BreweryDbApiService,
+                                 dao: BeerDao,
+                                 executor: Executor): BreweryDbRepository =
+      BreweryDbRepository(service, dao, executor)
 
-    @Singleton @Provides
-    fun provideBeerDatabase(): BeerDatabase =
-            Room.databaseBuilder(app, BeerDatabase::class.java, "beers_db")
-                    .fallbackToDestructiveMigration()
-                    .build()
+  @Singleton
+  @Provides
+  fun provideBeerDatabase(): BeerDatabase =
+      Room.databaseBuilder(app, BeerDatabase::class.java, "beers_db")
+          .fallbackToDestructiveMigration()
+          .build()
 
-    @Singleton @Provides
-    fun provideBeerDataAccessObject(db: BeerDatabase): BeerDao = db.beerDao()
+  @Singleton
+  @Provides
+  fun provideBeerDataAccessObject(db: BeerDatabase): BeerDao = db.beerDao()
 
 }

@@ -29,22 +29,19 @@ import android.arch.persistence.room.PrimaryKey
 import com.squareup.moshi.Json
 import java.io.Serializable
 
-/**
- * Beer.
- */
 
 @Entity(tableName = "beer")
 data class Beer(
-        @PrimaryKey @Json(name = "id") var id: String = "",
-        @Json(name = "name") var name: String = "",
-        @Json(name = "description") var description: String = "",
-        @Embedded @Json(name = "labels") var labels: Labels = Labels()
-): @Ignore Serializable
+    @PrimaryKey @Json(name = "id") var id: String = "",
+    @Json(name = "name") var name: String = "",
+    @Json(name = "description") var description: String = "",
+    @Embedded @Json(name = "labels") var labels: Labels = Labels()
+) : @Ignore Serializable
 
 
 data class Labels(
-        @Json(name = "icon") var icon: String = "",
-        @Ignore @Json(name = "medium") var medium: String = "",
-        @Ignore @Json(name = "large") var large: String = ""
-): @Ignore Serializable
+    @Json(name = "icon") var icon: String = "",
+    @Ignore @Json(name = "medium") var medium: String = "",
+    @Ignore @Json(name = "large") var large: String = ""
+) : @Ignore Serializable
 

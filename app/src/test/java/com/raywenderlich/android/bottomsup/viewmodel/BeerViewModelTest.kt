@@ -45,36 +45,42 @@ import org.mockito.Mockito.`when` as whenever
 @RunWith(JUnit4::class)
 class BeerViewModelTest {
 
-    @Rule @JvmField val instantExecutorRule = InstantTaskExecutorRule()
+  @Rule
+  @JvmField
+  val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val repository by lazy { mock(BreweryDbRepository::class.java) }
-    private lateinit var beerViewModel: BeerViewModel
-    private val beersList: LiveData<List<Beer>> = MutableLiveData()
+  private val repository by lazy { mock(BreweryDbRepository::class.java) }
+  private lateinit var beerViewModel: BeerViewModel
+  private val beersList: LiveData<List<Beer>> = MutableLiveData()
 
-    @Before fun setUp() {
-        whenever(repository.getBeers(1)).thenReturn(beersList)
-        beerViewModel = BeerViewModel(repository)
-    }
+  @Before
+  fun setUp() {
+    whenever(repository.getBeers(1)).thenReturn(beersList)
+    beerViewModel = BeerViewModel(repository)
+  }
 
-    @Test fun testNull() {
-        assertThat(beerViewModel.getBeers(), notNullValue())
-    }
+  @Test
+  fun testNull() {
+    assertThat(beerViewModel.getBeers(), notNullValue())
+  }
 
-    @Test fun testCallRepo() {
-        val captor = ArgumentCaptor.forClass(Int::class.java)
+  @Test
+  fun testCallRepo() {
+    val captor = ArgumentCaptor.forClass(Int::class.java)
 
-        verify(repository).getBeers(captor.capture())
-        assertThat(captor.value, `is`(1))
-    }
+    verify(repository).getBeers(captor.capture())
+    assertThat(captor.value, `is`(1))
+  }
 
-    @Test fun sendResultToUi() {
-        val observer = mock(Observer::class.java) as Observer<List<Beer>>
-        val liveData = beerViewModel.getBeers() //.observeForever(observer)
-        beersList.observeForever(observer)
+  @Test
+  fun sendResultToUi() {
+    val observer = mock(Observer::class.java) as Observer<List<Beer>>
+    val liveData = beerViewModel.getBeers() //.observeForever(observer)
+    beersList.observeForever(observer)
 
-        assertThat(liveData, `is`(beersList))
-        assertThat(LiveDataTestUtil.getValue(liveData), `is`(LiveDataTestUtil.getValue(beersList)))
-        verifyNoMoreInteractions(observer)
-    }
+    assertThat(liveData, `is`(beersList))
+    assertThat(LiveDataTestUtil.getValue(liveData), `is`(LiveDataTestUtil.getValue(beersList)))
+    verifyNoMoreInteractions(observer)
+  }
 
 }

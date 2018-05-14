@@ -26,9 +26,6 @@ import android.arch.lifecycle.ViewModel
 import dagger.MapKey
 import kotlin.reflect.KClass
 
-/**
- * ViewModelKey
- */
 
 @MustBeDocumented
 @Target(AnnotationTarget.FUNCTION)

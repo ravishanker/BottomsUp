@@ -31,23 +31,24 @@ import org.junit.Test
 
 class BeerDaoTest : DbTest() {
 
-    @Test @Throws(InterruptedException::class)
-    fun testInsertAndLoad() {
+  @Test
+  @Throws(InterruptedException::class)
+  fun testInsertAndLoad() {
 
-        db.beerDao().insert(beerList())
+    db.beerDao().insert(beerList())
 
-        val beers =  LiveDataTestUtil.getValue(db.beerDao().beers())
+    val beers = LiveDataTestUtil.getValue(db.beerDao().beers())
 
-        assertThat(beers.size, `is`(2))
-        assertThat(beers.first(), isA(Beer::class.java))
-        assertThat(beers.first().id, `is`("abc"))
-        assertThat(beers.last().id, `is`("def"))
-    }
+    assertThat(beers.size, `is`(2))
+    assertThat(beers.first(), isA(Beer::class.java))
+    assertThat(beers.first().id, `is`("abc"))
+    assertThat(beers.last().id, `is`("def"))
+  }
 
-    private fun beerList(): List<Beer> {
-        val beer1 = Beer("abc", "Beer1", "First Beer")
-        val beer2 = Beer("def", "Beer2", "Second Beer")
-        return listOf(beer1, beer2)
-    }
+  private fun beerList(): List<Beer> {
+    val beer1 = Beer("abc", "Beer1", "First Beer")
+    val beer2 = Beer("def", "Beer2", "Second Beer")
+    return listOf(beer1, beer2)
+  }
 
 }

@@ -29,20 +29,17 @@ import com.raywenderlich.android.bottomsup.data.repository.BreweryDbRepository
 import com.raywenderlich.android.bottomsup.model.Beer
 import javax.inject.Inject
 
-/**
- * BeersViewModel.
- */
 
 class BeerViewModel @Inject constructor(repository: BreweryDbRepository) : ViewModel() {
 
-    var beersList: LiveData<List<Beer>> = MutableLiveData()
+  var beersList: LiveData<List<Beer>> = MutableLiveData()
 
-    init {
-        beersList = repository.getBeers(1)
-    }
+  init {
+    beersList = repository.getBeers(1)
+  }
 
-    fun getBeers(): LiveData<List<Beer>> {
-        return beersList
-    }
+  fun getBeers(): LiveData<List<Beer>> {
+    return beersList
+  }
 
 }

@@ -26,7 +26,7 @@ import java.util.concurrent.Executor
 
 
 class InstantAppExecutor : Executor {
-    override fun execute(runnable: Runnable) {
-        runnable.run()
-    }
+  override fun execute(runnable: Runnable) {
+    runnable.run()
+  }
 }

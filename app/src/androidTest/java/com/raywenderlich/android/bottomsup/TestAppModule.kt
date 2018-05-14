@@ -34,15 +34,15 @@ import javax.inject.Singleton
 @Module
 class TestAppModule(app: Application) : AppModule(app) {
 
-    @Provides
-    override fun provideMockResponseInterceptor() = MockResponseInterceptor(app)
+  @Provides
+  override fun provideMockResponseInterceptor() = MockResponseInterceptor(app)
 
-    @Singleton
-    @Provides
-    override fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor,
-                                     mockResponseInterceptor: MockResponseInterceptor): OkHttpClient =
-            OkHttpClient.Builder()
-                    .addInterceptor(mockResponseInterceptor)
-                    .addInterceptor(loggingInterceptor)
-                    .build()
+  @Singleton
+  @Provides
+  override fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor,
+                                   mockResponseInterceptor: MockResponseInterceptor): OkHttpClient =
+      OkHttpClient.Builder()
+          .addInterceptor(mockResponseInterceptor)
+          .addInterceptor(loggingInterceptor)
+          .build()
 }

@@ -29,20 +29,16 @@ import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 
 
-/**
- * Application
- */
-
 open class BeersApp : DaggerApplication() {
 
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        val appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
-        appComponent.inject(this)
-        return appComponent
-    }
+  override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+    val appComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
+    appComponent.inject(this)
+    return appComponent
+  }
 
-    override fun onCreate() {
-        super.onCreate()
-        Stetho.initializeWithDefaults(this);
-    }
+  override fun onCreate() {
+    super.onCreate()
+    Stetho.initializeWithDefaults(this);
+  }
 }

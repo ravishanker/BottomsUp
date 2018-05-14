@@ -35,65 +35,61 @@ import com.raywenderlich.android.bottomsup.R
 import com.raywenderlich.android.bottomsup.model.Beer
 
 
-/**
- * Beers Recycler View Adapter.
- */
-
 class BeersRecyclerViewAdapter(private val parentActivity: BeerListActivity,
                                private val values: List<Beer>,
                                private val twoPane: Boolean) :
-        RecyclerView.Adapter<BeersRecyclerViewAdapter.ViewHolder>() {
+    RecyclerView.Adapter<BeersRecyclerViewAdapter.ViewHolder>() {
 
-    private val mOnClickListener: View.OnClickListener
+  private val mOnClickListener: View.OnClickListener
 
-    init {
-        mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as Beer
-            if (twoPane) {
-                val fragment = BeerDetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putSerializable(BeerDetailFragment.ARG_BEER, item)
-                    }
-                }
-                parentActivity.supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.beer_detail_container, fragment)
-                        .commit()
-            } else {
-                val intent = Intent(v.context, BeerDetailActivity::class.java).apply {
-                    putExtra(BeerDetailFragment.ARG_BEER, item)
-                }
-                v.context.startActivity(intent)
-            }
+  init {
+    mOnClickListener = View.OnClickListener { v ->
+      val item = v.tag as Beer
+      if (twoPane) {
+        val fragment = BeerDetailFragment().apply {
+          arguments = Bundle().apply {
+            putSerializable(BeerDetailFragment.ARG_BEER, item)
+          }
         }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding: ViewDataBinding = DataBindingUtil.inflate(
-                inflater, R.layout.beer_list_content, parent, false)
-
-        return ViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = values[position]
-        holder.bind(item)
-
-        with(holder.itemView) {
-            tag = item
-            setOnClickListener(mOnClickListener)
+        parentActivity.supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.beer_detail_container, fragment)
+            .commit()
+      } else {
+        val intent = Intent(v.context, BeerDetailActivity::class.java).apply {
+          putExtra(BeerDetailFragment.ARG_BEER, item)
         }
+        v.context.startActivity(intent)
+      }
     }
+  }
 
-    override fun getItemCount(): Int {
-        return values.size
-    }
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    val inflater = LayoutInflater.from(parent.context)
+    val binding: ViewDataBinding = DataBindingUtil.inflate(
+        inflater, R.layout.beer_list_content, parent, false)
 
-    inner class ViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: Any) {
-            binding.setVariable(BR.beer, data)
-            binding.executePendingBindings()
-        }
+    return ViewHolder(binding)
+  }
+
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    val item = values[position]
+    holder.bind(item)
+
+    with(holder.itemView) {
+      tag = item
+      setOnClickListener(mOnClickListener)
     }
+  }
+
+  override fun getItemCount(): Int {
+    return values.size
+  }
+
+  inner class ViewHolder(private val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
+    fun bind(data: Any) {
+      binding.setVariable(BR.beer, data)
+      binding.executePendingBindings()
+    }
+  }
 }

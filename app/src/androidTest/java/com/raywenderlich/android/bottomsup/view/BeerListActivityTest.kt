@@ -49,26 +49,29 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class BeerListActivityTest {
 
-    @Rule @JvmField
-    val activityTestRule = ActivityTestRule<BeerListActivity>(BeerListActivity::class.java)
+  @Rule
+  @JvmField
+  val activityTestRule = ActivityTestRule<BeerListActivity>(BeerListActivity::class.java)
 
-    @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getTargetContext()
-        Assert.assertEquals("com.raywenderlich.android.bottomsup", appContext.packageName)
-    }
+  @Test
+  fun useAppContext() {
+    // Context of the app under test.
+    val appContext = InstrumentationRegistry.getTargetContext()
+    Assert.assertEquals("com.raywenderlich.android.bottomsup", appContext.packageName)
+  }
 
-    @Test @Throws(Exception::class)
-    fun testAppName() {
-        onView(withText("Bottoms Up")).check(matches(isDisplayed()))
-    }
+  @Test
+  @Throws(Exception::class)
+  fun testAppName() {
+    onView(withText("Bottoms Up")).check(matches(isDisplayed()))
+  }
 
-    @Test @Throws(Exception::class)
-    fun testBeerListDisplayed() {
-        onView(withId(R.id.beer_list)).check(matches(isDisplayed()))
-        onView(withId(R.id.beer_list)).perform(RecyclerViewActions
-                .actionOnItemAtPosition<BeersRecyclerViewAdapter.ViewHolder>(1, click()))
-    }
+  @Test
+  @Throws(Exception::class)
+  fun testBeerListDisplayed() {
+    onView(withId(R.id.beer_list)).check(matches(isDisplayed()))
+    onView(withId(R.id.beer_list)).perform(RecyclerViewActions
+        .actionOnItemAtPosition<BeersRecyclerViewAdapter.ViewHolder>(1, click()))
+  }
 
 }
